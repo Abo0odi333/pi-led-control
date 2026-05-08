@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحكم LED الراسبيري باي</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a2e; color: white; text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100vh; margin: 0; }
+        h1 { margin-bottom: 30px; color: #0f3460; background: #e94560; padding: 15px; border-radius: 10px; display: inline-block; margin: 20px auto; }
+        .container { background: #16213e; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 300px; margin: 0 auto; }
+        button { width: 100%; font-size: 20px; padding: 15px; margin: 10px 0; cursor: pointer; border-radius: 12px; border: none; transition: 0.3s; font-weight: bold; }
+        .btn-on { background-color: #28a745; color: white; }
+        .btn-on:hover { background-color: #218838; transform: scale(1.05); }
+        .btn-off { background-color: #dc3545; color: white; }
+        .btn-off:hover { background-color: #c82333; transform: scale(1.05); }
+        #status { margin-top: 20px; font-size: 14px; color: #888; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>التحكم باللمبة</h1>
+        <button class="btn-on" onclick="sendData('ON')">تشغيل (ON)</button>
+        <button class="btn-off" onclick="sendData('OFF')">إطفاء (OFF)</button>
+        <div id="status">جاهز لإرسال الأوامر</div>
+    </div>
+
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxAbEvJ6fLVNMzRr-ghlS4U_X4R2xWDZRPXU0tZ3kUIG3OSk6YnC4ZKce84h_mFXSdZ/exec";
+
+        function sendData(value) {
+            document.getElementById('status').innerText = "جاري الإرسال...";
+            
+            // نستخدم mode: 'no-cors' لأن قوقل سكريبت يقوم بإعادة توجيه (Redirect)
+            fetch(scriptURL + "?state=" + value, {
+                mode: 'no-cors'
+            })
+            .then(() => {
+                document.getElementById('status').innerText = "تم إرسال أمر: " + value;
+            })
+            .catch(error => {
+                document.getElementById('status').innerText = "حدث خطأ!";
+                console.error('Error!', error.message);
+            });
+        }
+    </script>
+</body>
+</html>
